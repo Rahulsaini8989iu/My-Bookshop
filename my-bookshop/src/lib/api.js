@@ -1,19 +1,40 @@
 // src/lib/api.js
-import axios from 'axios';
+import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+/**
+ * Backend base URL
+ * - Local:  http://localhost:5000
+ * - Live:   https://my-bookshop.onrender.com
+ */
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.MODE === "production"
+    ? "https://my-bookshop.onrender.com"
+    : "http://localhost:5000");
 
+/**
+ * Axios instance
+ */
 const api = axios.create({
   baseURL: API_URL,
+  withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
-// Request interceptor - token automatically add karega
+/**
+ * Request interceptor
+ * - Har request ke saath token attach karega
+ */
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
     return config;
   },
   (error) => {
@@ -21,15 +42,19 @@ api.interceptors.request.use(
   }
 );
 
-// Response interceptor - errors handle karega
+/**
+ * Response interceptor
+ * - 401 aane par auto logout + redirect
+ */
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.href = '/login';
+    if (error.response && error.response.status === 401) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      window.location.href = "/login";
     }
+
     return Promise.reject(error);
   }
 );
