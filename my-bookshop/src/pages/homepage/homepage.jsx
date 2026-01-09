@@ -1,5 +1,5 @@
 import { useState } from "react";
-import SideFilter from "../../components/SideFilter";
+import SideFilter from "../../components/sidefilter";
 import BookCard from "../../components/BookCard";
 import Navbar from "../../components/Navbar";
 
