@@ -1,0 +1,16 @@
+{
+  "name": "booksell-root",
+  "private": true,
+  "devDependencies": {
+    "concurrently": "^8.0.0"
+  },
+  "scripts": {
+    "dev:backend": "cd bookshop-backend && npm run dev",
+    "dev:frontend": "cd my-bookshop && npm run dev",
+    "dev": "concurrently \"npm:dev:backend\" \"npm:dev:frontend\""
+  },
+  "dependencies": {
+    "mongoose": "^9.0.0",
+    "multer": "^2.0.2"
+  }
+}
